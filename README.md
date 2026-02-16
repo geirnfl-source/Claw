@@ -2,6 +2,8 @@
 
 A modern Angular application with password protection, featuring a project portfolio dashboard and interactive Flutter demos.
 
+**Latest Update:** Configured for proper Vercel deployment with Angular build settings.
+
 ## 🚀 Features
 
 - **Password Protected Access** - Secure login system
@@ -49,37 +51,44 @@ ebhemh-angular-project/
 
 ### Setup
 1. **Install dependencies:**
-   \`\`\`bash
+   ```bash
    npm install
-   \`\`\`
+   ```
 
 2. **Start development server:**
-   \`\`\`bash
+   ```bash
    npm start
    # or
    ng serve
-   \`\`\`
+   ```
 
 3. **Open in browser:**
    Navigate to `http://localhost:4200`
 
 ### Build for Production
-\`\`\`bash
+```bash
 npm run build
 # or
 ng build --configuration production
-\`\`\`
+```
 
 The build artifacts will be stored in the `dist/` directory.
 
 ## 🚀 Deployment to Vercel
 
-### Option 1: Direct Upload (Recommended for beginners)
+### Option 1: GitHub Integration (Current Setup)
+
+The project is already configured for automatic deployment:
+- **Build Command:** `npm run build`
+- **Output Directory:** `dist/ebhemh-angular-project`
+- **Framework:** Angular (configured as Other)
+
+### Option 2: Direct Upload
 
 1. **Build the project:**
-   \`\`\`bash
+   ```bash
    npm run build
-   \`\`\`
+   ```
 
 2. **Create deployment package:**
    - Go to `dist/ebhemh-angular-project/` folder
@@ -93,28 +102,12 @@ The build artifacts will be stored in the `dist/` directory.
    - Upload your ZIP file
    - Connect your custom domain (ebhemh.com)
 
-### Option 2: GitHub Integration
-
-1. **Push to GitHub:**
-   \`\`\`bash
-   git init
-   git add .
-   git commit -m "Initial commit"
-   git remote add origin YOUR_GITHUB_REPO_URL
-   git push -u origin main
-   \`\`\`
-
-2. **Deploy with Vercel:**
-   - Connect your GitHub repository to Vercel
-   - Set build command to: `npm run build`
-   - Set output directory to: `dist/ebhemh-angular-project`
-
 ## 🎨 Customization
 
 ### Adding New Projects
 Edit the `projects` array in `src/app/components/dashboard/dashboard.component.ts`:
 
-\`\`\`typescript
+```typescript
 {
   id: 6,
   title: 'Your New Project',
@@ -124,14 +117,14 @@ Edit the `projects` array in `src/app/components/dashboard/dashboard.component.t
   technologies: ['Angular', 'TypeScript', 'etc'],
   demoUrl: 'optional-demo-url'
 }
-\`\`\`
+```
 
 ### Changing Password
 Update `correctPassword` in `src/app/services/auth.service.ts`:
 
-\`\`\`typescript
+```typescript
 private readonly correctPassword = 'your-new-password';
-\`\`\`
+```
 
 ### Styling
 - Global styles: `src/styles.scss`
