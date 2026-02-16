@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flutter Trading App Demo</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Roboto', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: #f5f5f5;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .app-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .app-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+        
+        .portfolio-value {
+            font-size: 1.1rem;
+            font-weight: 700;
+        }
+        
+        .main-content {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+        }
+        
+        .demo-notice {
+            background: #e3f2fd;
+            border-left: 4px solid #2196f3;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 4px;
+        }
+        
+        .demo-notice h3 {
+            color: #1976d2;
+            margin-bottom: 8px;
+        }
+        
+        .demo-notice p {
+            color: #424242;
+            font-size: 0.9rem;
+        }
+        
+        .trading-interface {
+            display: grid;
+            grid-template-columns: 1fr 300px;
+            gap: 20px;
+            height: calc(100vh - 140px);
+        }
+        
+        .chart-section {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.05);
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .chart-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .stock-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .stock-symbol {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: #2c3e50;
+        }
+        
+        .stock-price {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #27ae60;
+        }
+        
+        .price-change {
+            font-size: 0.9rem;
+            color: #27ae60;
+            background: #e8f5e8;
+            padding: 4px 8px;
+            border-radius: 4px;
+        }
+        
+        .chart-placeholder {
+            flex: 1;
+            background: #f8f9fa;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            min-height: 300px;
+        }
+        
+        .chart-canvas {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, #667eea20 0%, #764ba220 100%);
+            border-radius: 8px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .chart-line {
+            position: absolute;
+            top: 50%;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: #27ae60;
+            transform: translateY(-50%);
+            animation: pulse 2s ease-in-out infinite;
+        }
+        
+        .chart-line::before {
+            content: '';
+            position: absolute;
+            right: 0;
+            top: -4px;
+            width: 0;
+            height: 0;
+            border-left: 8px solid #27ae60;
+            border-top: 5px solid transparent;
+            border-bottom: 5px solid transparent;
+        }
+        
+        .trading-panel {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.05);
+            padding: 20px;
+            height: fit-content;
+        }
+        
+        .panel-tabs {
+            display: flex;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .tab {
+            flex: 1;
+            padding: 12px;
+            text-align: center;
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+        
+        .tab.active {
+            color: #667eea;
+            border-bottom-color: #667eea;
+        }
+        
+        .order-form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        
+        .form-label {
+            font-weight: 500;
+            color: #2c3e50;
+            font-size: 0.9rem;
+        }
+        
+        .form-input {
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+        
+        .form-input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+        
+        .order-buttons {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        
+        .btn {
+            padding: 12px 20px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1rem;
+        }
+        
+        .btn-buy {
+            background: #27ae60;
+            color: white;
+        }
+        
+        .btn-buy:hover {
+            background: #219a52;
+            transform: translateY(-1px);
+        }
+        
+        .btn-sell {
+            background: #e74c3c;
+            color: white;
+        }
+        
+        .btn-sell:hover {
+            background: #c0392b;
+            transform: translateY(-1px);
+        }
+        
+        .portfolio-summary {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+        }
+        
+        .summary-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 0;
+        }
+        
+        .summary-label {
+            color: #666;
+            font-size: 0.9rem;
+        }
+        
+        .summary-value {
+            font-weight: 600;
+            color: #2c3e50;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+        
+        @media (max-width: 768px) {
+            .trading-interface {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+            
+            .main-content {
+                padding: 15px;
+            }
+            
+            .chart-section,
+            .trading-panel {
+                padding: 15px;
+            }
+        }
+        
+        .interactive-demo {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            background: #667eea;
+            color: white;
+            padding: 8px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            animation: bounce 2s infinite;
+        }
+        
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-10px); }
+            60% { transform: translateY(-5px); }
+        }
+    </style>
+</head>
+<body>
+    <div class="app-header">
+        <div class="app-title">📈 Trading Pro</div>
+        <div class="portfolio-value">$12,345.67</div>
+    </div>
+    
+    <div class="interactive-demo">🎮 Interactive Demo</div>
+    
+    <div class="main-content">
+        <div class="demo-notice">
+            <h3>🚀 Flutter Trading App Demo</h3>
+            <p>This is a clickable prototype of a trading application built with Flutter. Try interacting with the buy/sell buttons and form inputs!</p>
+        </div>
+        
+        <div class="trading-interface">
+            <div class="chart-section">
+                <div class="chart-header">
+                    <div class="stock-info">
+                        <div class="stock-symbol">AAPL</div>
+                        <div class="stock-price">$182.45</div>
+                        <div class="price-change">+2.34 (1.28%)</div>
+                    </div>
+                </div>
+                <div class="chart-placeholder">
+                    <div class="chart-canvas">
+                        <div class="chart-line"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="trading-panel">
+                <div class="panel-tabs">
+                    <div class="tab active" onclick="switchTab('buy')">Buy</div>
+                    <div class="tab" onclick="switchTab('sell')">Sell</div>
+                </div>
+                
+                <div class="order-form">
+                    <div class="form-group">
+                        <label class="form-label">Order Type</label>
+                        <select class="form-input" onchange="updateOrderType()">
+                            <option>Market Order</option>
+                            <option>Limit Order</option>
+                            <option>Stop Loss</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Quantity</label>
+                        <input type="number" class="form-input" value="10" placeholder="Enter quantity" onchange="calculateTotal()">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Price per Share</label>
+                        <input type="number" class="form-input" value="182.45" placeholder="Price" onchange="calculateTotal()">
+                    </div>
+                    
+                    <div class="order-buttons">
+                        <button class="btn btn-buy" onclick="placeBuyOrder()">Buy AAPL</button>
+                        <button class="btn btn-sell" onclick="placeSellOrder()">Sell AAPL</button>
+                    </div>
+                </div>
+                
+                <div class="portfolio-summary">
+                    <h4 style="margin-bottom: 15px; color: #2c3e50;">Portfolio Summary</h4>
+                    <div class="summary-item">
+                        <span class="summary-label">Total Value:</span>
+                        <span class="summary-value">$12,345.67</span>
+                    </div>
+                    <div class="summary-item">
+                        <span class="summary-label">Today's P&L:</span>
+                        <span class="summary-value" style="color: #27ae60;">+$234.56</span>
+                    </div>
+                    <div class="summary-item">
+                        <span class="summary-label">Available Cash:</span>
+                        <span class="summary-value">$2,456.78</span>
+                    </div>
+                    <div class="summary-item">
+                        <span class="summary-label">Positions:</span>
+                        <span class="summary-value">12</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        function switchTab(tab) {
+            const tabs = document.querySelectorAll('.tab');
+            tabs.forEach(t => t.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            const buyBtn = document.querySelector('.btn-buy');
+            const sellBtn = document.querySelector('.btn-sell');
+            
+            if (tab === 'buy') {
+                buyBtn.style.display = 'block';
+                sellBtn.style.display = 'none';
+            } else {
+                buyBtn.style.display = 'none';
+                sellBtn.style.display = 'block';
+            }
+        }
+        
+        function updateOrderType() {
+            const orderType = event.target.value;
+            console.log('Order type changed to:', orderType);
+            // Simulate UI changes based on order type
+        }
+        
+        function calculateTotal() {
+            const quantity = document.querySelector('input[placeholder="Enter quantity"]').value;
+            const price = document.querySelector('input[placeholder="Price"]').value;
+            const total = (quantity * price).toFixed(2);
+            console.log('Total order value:', total);
+        }
+        
+        function placeBuyOrder() {
+            const quantity = document.querySelector('input[placeholder="Enter quantity"]').value;
+            const price = document.querySelector('input[placeholder="Price"]').value;
+            
+            // Simulate order placement
+            const orderValue = (quantity * price).toFixed(2);
+            
+            // Show a realistic notification
+            showNotification('✅ Buy Order Placed', `${quantity} shares of AAPL at $${price} each. Total: $${orderValue}`, 'success');
+            
+            // Simulate portfolio update
+            setTimeout(() => {
+                updatePortfolioDisplay();
+            }, 1000);
+        }
+        
+        function placeSellOrder() {
+            const quantity = document.querySelector('input[placeholder="Enter quantity"]').value;
+            const price = document.querySelector('input[placeholder="Price"]').value;
+            
+            // Simulate order placement
+            const orderValue = (quantity * price).toFixed(2);
+            
+            // Show a realistic notification
+            showNotification('💰 Sell Order Placed', `${quantity} shares of AAPL at $${price} each. Total: $${orderValue}`, 'success');
+            
+            // Simulate portfolio update
+            setTimeout(() => {
+                updatePortfolioDisplay();
+            }, 1000);
+        }
+        
+        function showNotification(title, message, type) {
+            // Create notification element
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: ${type === 'success' ? '#27ae60' : '#e74c3c'};
+                color: white;
+                padding: 15px 20px;
+                border-radius: 8px;
+                box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+                z-index: 1000;
+                max-width: 300px;
+                animation: slideIn 0.3s ease;
+            `;
+            
+            notification.innerHTML = `
+                <div style="font-weight: 600; margin-bottom: 5px;">${title}</div>
+                <div style="font-size: 0.9rem; opacity: 0.9;">${message}</div>
+            `;
+            
+            document.body.appendChild(notification);
+            
+            // Remove notification after 3 seconds
+            setTimeout(() => {
+                notification.style.animation = 'slideOut 0.3s ease forwards';
+                setTimeout(() => {
+                    document.body.removeChild(notification);
+                }, 300);
+            }, 3000);
+        }
+        
+        function updatePortfolioDisplay() {
+            // Simulate portfolio value changes
+            const portfolioValue = document.querySelector('.portfolio-value');
+            const currentValue = parseFloat(portfolioValue.textContent.replace(/[$,]/g, ''));
+            const change = (Math.random() - 0.5) * 100; // Random change
+            const newValue = (currentValue + change).toFixed(2);
+            
+            portfolioValue.textContent = '$' + Number(newValue).toLocaleString();
+            portfolioValue.style.animation = 'pulse 0.5s ease';
+        }
+        
+        // Add some dynamic behavior
+        document.addEventListener('DOMContentLoaded', function() {
+            // Simulate real-time price updates
+            setInterval(() => {
+                const priceElement = document.querySelector('.stock-price');
+                const currentPrice = parseFloat(priceElement.textContent.replace('$', ''));
+                const change = (Math.random() - 0.5) * 2; // Small random change
+                const newPrice = (currentPrice + change).toFixed(2);
+                priceElement.textContent = '$' + newPrice;
+                
+                // Update price change indicator
+                const changeElement = document.querySelector('.price-change');
+                const totalChange = (newPrice - 180.11).toFixed(2); // Assuming base price of $180.11
+                const percentChange = ((totalChange / 180.11) * 100).toFixed(2);
+                
+                changeElement.textContent = `${totalChange >= 0 ? '+' : ''}${totalChange} (${percentChange}%)`;
+                changeElement.style.color = totalChange >= 0 ? '#27ae60' : '#e74c3c';
+                changeElement.style.backgroundColor = totalChange >= 0 ? '#e8f5e8' : '#fdeaea';
+                
+                // Update form price
+                const priceInput = document.querySelector('input[placeholder="Price"]');
+                if (priceInput) {
+                    priceInput.value = newPrice;
+                }
+            }, 3000); // Update every 3 seconds
+        });
+        
+        // Add CSS animations
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes slideIn {
+                from { transform: translateX(100%); opacity: 0; }
+                to { transform: translateX(0); opacity: 1; }
+            }
+            
+            @keyframes slideOut {
+                from { transform: translateX(0); opacity: 1; }
+                to { transform: translateX(100%); opacity: 0; }
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html>
