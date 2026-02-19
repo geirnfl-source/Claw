@@ -34,9 +34,28 @@ interface Project {
       </header>
 
       <main class="dashboard-main">
-        <section class="welcome-section">
-          <h2>Welcome to Your Project Portfolio</h2>
-          <p>Here are your digital project ideas and demos</p>
+        <section class="hero-section">
+          <div class="hero-copy">
+            <p class="hero-eyebrow">AI Neo-Bank • Iceland</p>
+            <h2>Liquidity, wealth &amp; family goals in one glass dashboard.</h2>
+            <p class="hero-body">Realtime ISK insights, neon glass UI, and an assistant that keeps savings, transfers, and dreams aligned.</p>
+            <div class="hero-actions">
+              <button class="hero-primary" (click)="openDemo(projects[0])">Launch demo</button>
+              <button class="hero-ghost" (click)="openFullScreen()">Fullscreen AI mode</button>
+            </div>
+          </div>
+          <div class="hero-orb"></div>
+        </section>
+
+        <section class="memory-section">
+          <div class="memory-card">
+            <div class="memory-photo" [style.backgroundImage]="'url(' + familyCard + ')'"></div>
+            <div class="memory-copy">
+              <p class="memory-eyebrow">Personal AI snapshot</p>
+              <h3>Plans built for us</h3>
+              <p>This prototype keeps our Icelandic adventures funded: fireworks nights, matching snowsuits, and future cabin savings. Tap the demo to see how the assistant turns memories into financial sprints.</p>
+            </div>
+          </div>
         </section>
 
         <section class="projects-section">
@@ -131,7 +150,8 @@ interface Project {
   styles: [`
     .dashboard-container {
       min-height: 100vh;
-      background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+      background: radial-gradient(circle at top, #1f0c24, #050505);
+      color: #f4f4f8;
     }
 
     .dashboard-header {
@@ -182,24 +202,125 @@ interface Project {
     .dashboard-main {
       max-width: 1200px;
       margin: 0 auto;
-      padding: 40px 20px;
+      padding: 40px 20px 80px;
     }
 
-    .welcome-section {
-      text-align: center;
-      margin-bottom: 60px;
+    .hero-section {
+      display: flex;
+      gap: 32px;
+      align-items: center;
+      padding: 48px;
+      border-radius: 32px;
+      background: rgba(17, 17, 17, 0.55);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      box-shadow: 0 35px 80px rgba(0, 0, 0, 0.45);
+      margin-bottom: 32px;
+      overflow: hidden;
+      position: relative;
     }
 
-    .welcome-section h2 {
-      font-size: 2.5rem;
+    .hero-copy h2 {
+      font-size: clamp(2.4rem, 4vw, 3.5rem);
+      margin: 12px 0;
+      color: #ffffff;
+    }
+
+    .hero-eyebrow {
+      text-transform: uppercase;
+      letter-spacing: 3px;
+      font-size: 0.85rem;
+      color: #d946ef;
+    }
+
+    .hero-body {
+      color: rgba(244, 244, 248, 0.8);
+      max-width: 560px;
+      font-size: 1.05rem;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 24px;
+    }
+
+    .hero-primary, .hero-ghost {
+      padding: 12px 28px;
+      border-radius: 999px;
+      border: none;
+      cursor: pointer;
       font-weight: 600;
-      color: #2c3e50;
-      margin-bottom: 16px;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
     }
 
-    .welcome-section p {
-      font-size: 1.1rem;
-      color: #7f8c8d;
+    .hero-primary {
+      background: linear-gradient(120deg, #6366f1, #d946ef);
+      color: white;
+      box-shadow: 0 10px 30px rgba(99,102,241,0.45);
+    }
+
+    .hero-ghost {
+      background: rgba(255, 255, 255, 0.1);
+      color: #f4f4f8;
+      border: 1px solid rgba(255,255,255,0.2);
+      backdrop-filter: blur(6px);
+    }
+
+    .hero-primary:hover, .hero-ghost:hover {
+      transform: translateY(-2px);
+    }
+
+    .hero-orb {
+      width: 260px;
+      height: 260px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(99,102,241,0.8), rgba(13,13,13,0));
+      position: absolute;
+      right: -60px;
+      top: -40px;
+      filter: blur(0px);
+      opacity: 0.7;
+    }
+
+    .memory-section {
+      margin: 40px 0 60px;
+    }
+
+    .memory-card {
+      display: grid;
+      grid-template-columns: minmax(240px, 320px) 1fr;
+      gap: 32px;
+      padding: 28px;
+      border-radius: 28px;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      box-shadow: 0 25px 70px rgba(0, 0, 0, 0.35);
+    }
+
+    .memory-photo {
+      border-radius: 24px;
+      background-size: cover;
+      background-position: center;
+      min-height: 220px;
+    }
+
+    .memory-eyebrow {
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      font-size: 0.75rem;
+      color: #a5b4fc;
+    }
+
+    .memory-copy h3 {
+      font-size: 1.8rem;
+      margin: 10px 0;
+      color: white;
+    }
+
+    .memory-copy p {
+      color: rgba(244, 244, 248, 0.75);
+      line-height: 1.6;
     }
 
     .section-header {
@@ -209,11 +330,12 @@ interface Project {
       margin-bottom: 30px;
       flex-wrap: wrap;
       gap: 20px;
+      color: #f6f7ff;
     }
 
     .section-header h3 {
       font-size: 1.5rem;
-      color: #2c3e50;
+      color: #f6f7ff;
       margin: 0;
     }
 
@@ -248,21 +370,22 @@ interface Project {
     }
 
     .project-card {
-      background: white;
-      border-radius: 16px;
-      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 20px;
+      box-shadow: 0 18px 45px rgba(0, 0, 0, 0.45);
       overflow: hidden;
       transition: all 0.3s ease;
     }
 
     .project-card:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+      transform: translateY(-4px);
+      box-shadow: 0 25px 65px rgba(0, 0, 0, 0.55);
     }
 
     .project-image {
-      height: 200px;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      height: 220px;
+      background: linear-gradient(135deg, #351463, #8f2de2);
       position: relative;
       display: flex;
       align-items: center;
@@ -274,12 +397,13 @@ interface Project {
       position: absolute;
       top: 15px;
       left: 15px;
-      background: rgba(255, 255, 255, 0.9);
+      background: rgba(255, 255, 255, 0.16);
       padding: 5px 12px;
       border-radius: 20px;
       font-size: 0.8rem;
       font-weight: 600;
-      color: #667eea;
+      color: #fff;
+      backdrop-filter: blur(6px);
     }
 
     .project-status {
@@ -291,12 +415,9 @@ interface Project {
       font-size: 0.75rem;
       font-weight: 600;
       text-transform: uppercase;
+      background: rgba(0,0,0,0.3);
+      color: white;
     }
-
-    .project-status.concept { background: #ffeaa7; color: #fdcb6e; }
-    .project-status.in-progress { background: #74b9ff; color: white; }
-    .project-status.demo-ready { background: #00b894; color: white; }
-    .project-status.completed { background: #6c5ce7; color: white; }
 
     .project-content {
       padding: 25px;
@@ -305,12 +426,12 @@ interface Project {
     .project-content h4 {
       font-size: 1.3rem;
       font-weight: 600;
-      color: #2c3e50;
+      color: #f4f4f8;
       margin: 0 0 12px;
     }
 
     .project-content p {
-      color: #7f8c8d;
+      color: rgba(244, 244, 248, 0.7);
       line-height: 1.6;
       margin: 0 0 20px;
     }
@@ -323,8 +444,8 @@ interface Project {
     }
 
     .tech-badge {
-      background: #f8f9fa;
-      color: #495057;
+      background: rgba(255, 255, 255, 0.08);
+      color: #d5d7ff;
       padding: 4px 12px;
       border-radius: 12px;
       font-size: 0.8rem;
@@ -337,8 +458,8 @@ interface Project {
     }
 
     .demo-btn, .details-btn {
-      padding: 10px 16px;
-      border-radius: 8px;
+      padding: 12px 16px;
+      border-radius: 999px;
       border: none;
       cursor: pointer;
       font-weight: 600;
@@ -347,24 +468,23 @@ interface Project {
     }
 
     .demo-btn {
-      background: #667eea;
+      background: linear-gradient(120deg, #5c6ac4, #b44cf2);
       color: white;
+      box-shadow: 0 12px 30px rgba(91, 103, 196, 0.4);
     }
 
     .demo-btn:hover {
-      background: #5a67d8;
-      transform: translateY(-1px);
+      transform: translateY(-2px);
     }
 
     .details-btn {
-      background: #f8f9fa;
-      color: #495057;
-      border: 1px solid #dee2e6;
+      background: rgba(255, 255, 255, 0.08);
+      color: rgba(244,244,248,0.8);
+      border: 1px solid rgba(255,255,255,0.1);
     }
 
     .details-btn:hover {
-      background: #e9ecef;
-      transform: translateY(-1px);
+      transform: translateY(-2px);
     }
 
     .flutter-demo-section {
@@ -453,6 +573,7 @@ export class DashboardComponent implements OnInit {
   showFlutterDemo: boolean = false;
   flutterDemoUrl: SafeResourceUrl | null = null;
   private readonly flutterDemoSrc = '/assets/flutter-demo/index.html';
+  familyCard: string = 'assets/family-moment.jpg';
 
   // Focus on a single flagship Flutter demo for now
   projects: Project[] = [
