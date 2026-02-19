@@ -4,7 +4,7 @@ import { Injectable } from '@angular/core';
   providedIn: 'root'
 })
 export class AuthService {
-  private readonly correctPassword = 'ebhemh2026'; // You can change this password
+  private readonly correctPassword = 'Vor2026'; // Updated password per request
   private isAuthenticated = false;
 
   constructor() {

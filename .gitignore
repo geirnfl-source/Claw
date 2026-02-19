@@ -1,0 +1,25 @@
+# Node / Angular artifacts
+node_modules/
+dist/
+.angular/
+
+# Flutter / Dart artifacts
+neo_bank_flutter/.dart_tool/
+neo_bank_flutter/.idea/
+neo_bank_flutter/.vscode/
+neo_bank_flutter/build/
+neo_bank_flutter/neo_bank_flutter.iml
+neo_bank_flutter/.flutter-plugins*
+neo_bank_flutter/.package-lock.json
+
+# Workspace-specific helper docs (not part of deployable app)
+AGENTS.md
+SOUL.md
+BOOTSTRAP.md
+HEARTBEAT.md
+IDENTITY.md
+TOOLS.md
+USER.md
+
+# Misc
+.DS_Store
