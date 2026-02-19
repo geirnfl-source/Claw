@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { AuthService } from '../../services/auth.service';
@@ -438,7 +439,7 @@ interface Project {
 export class DashboardComponent implements OnInit {
   selectedFilter: string = 'all';
   showFlutterDemo: boolean = false;
-  flutterDemoUrl: string = '';
+  flutterDemoUrl: SafeResourceUrl | null = null;
 
   // Sample project data - in real app this would come from a service/API
   projects: Project[] = [
@@ -488,7 +489,11 @@ export class DashboardComponent implements OnInit {
 
   filteredProjects: Project[] = [];
 
-  constructor(private authService: AuthService, private router: Router) {}
+  constructor(
+    private authService: AuthService,
+    private router: Router,
+    private sanitizer: DomSanitizer
+  ) {}
 
   ngOnInit() {
     this.filterProjects('all');
@@ -526,7 +531,9 @@ export class DashboardComponent implements OnInit {
   openDemo(project: Project) {
     if (project.demoUrl === 'flutter-trading-demo') {
       this.showFlutterDemo = true;
-      this.flutterDemoUrl = 'assets/flutter-demo/index.html'; // We'll create this
+      this.flutterDemoUrl = this.sanitizer.bypassSecurityTrustResourceUrl(
+        '/assets/flutter-demo/index.html'
+      );
     } else if (project.demoUrl === 'flutter-mobile-demo') {
       this.showFlutterDemo = true;
       this.flutterDemoUrl = 'assets/flutter-mobile-demo/index.html'; // We'll create this
