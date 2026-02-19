@@ -441,7 +441,7 @@ export class DashboardComponent implements OnInit {
   showFlutterDemo: boolean = false;
   flutterDemoUrl: SafeResourceUrl | null = null;
 
-  // Sample project data - in real app this would come from a service/API
+  // Focus on a single flagship Flutter demo for now
   projects: Project[] = [
     {
       id: 1,
@@ -449,41 +449,8 @@ export class DashboardComponent implements OnInit {
       description: 'Modern trading application with real-time market data, advanced charting, and portfolio management. Features include risk assessment, automated trading strategies, and multi-asset support.',
       type: 'trading-app',
       status: 'demo-ready',
-      technologies: ['Angular', 'TypeScript', 'Chart.js', 'WebSockets', 'Material Design'],
+      technologies: ['Flutter', 'Dart', 'Glass UI', 'Neon UX'],
       demoUrl: 'flutter-trading-demo'
-    },
-    {
-      id: 2,
-      title: 'AI-Powered Investment Advisor',
-      description: 'Intelligent investment recommendation system using machine learning to analyze market trends and provide personalized investment strategies.',
-      type: 'ai-project',
-      status: 'in-progress',
-      technologies: ['Python', 'TensorFlow', 'Angular', 'REST API', 'PostgreSQL']
-    },
-    {
-      id: 3,
-      title: 'Cryptocurrency Portfolio Tracker',
-      description: 'Comprehensive crypto portfolio management with price alerts, market analysis, and automated rebalancing features.',
-      type: 'web-app',
-      status: 'concept',
-      technologies: ['React', 'Node.js', 'MongoDB', 'CoinGecko API', 'D3.js']
-    },
-    {
-      id: 4,
-      title: 'Mobile Trading App',
-      description: 'Flutter-based mobile trading application with biometric authentication, push notifications, and offline capability.',
-      type: 'mobile-app',
-      status: 'demo-ready',
-      technologies: ['Flutter', 'Dart', 'Firebase', 'REST API', 'Biometric Auth'],
-      demoUrl: 'flutter-mobile-demo'
-    },
-    {
-      id: 5,
-      title: 'Real Estate Investment Platform',
-      description: 'Digital platform for real estate investment with virtual property tours, investment calculators, and market analytics.',
-      type: 'web-app',
-      status: 'completed',
-      technologies: ['Angular', 'Node.js', 'Three.js', 'PostgreSQL', 'AWS']
     }
   ];
 
