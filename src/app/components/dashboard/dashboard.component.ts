@@ -112,19 +112,17 @@ interface Project {
 
         <!-- Flutter Demo Section -->
         <section class="flutter-demo-section" *ngIf="showFlutterDemo">
-          <div class="demo-header">
-            <h3>🎯 Interactive Flutter Demo</h3>
+          <div class="flutter-demo-shell">
             <button class="close-demo" (click)="closeFlutterDemo()">✕</button>
-          </div>
-          
-          <div class="flutter-demo-container">
-            <iframe 
-              [src]="flutterDemoUrl" 
-              frameborder="0"
-              width="100%"
-              height="600"
-              class="flutter-iframe"
-            ></iframe>
+            <button class="fullscreen-btn" (click)="openFullScreen()">⤢ Fullscreen</button>
+            <div class="iphone-frame">
+              <iframe 
+                [src]="flutterDemoUrl" 
+                frameborder="0"
+                class="flutter-iframe"
+                allow="fullscreen"
+              ></iframe>
+            </div>
           </div>
         </section>
       </main>
@@ -370,53 +368,67 @@ interface Project {
     }
 
     .flutter-demo-section {
-      background: white;
-      border-radius: 16px;
-      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
       margin-top: 40px;
-      overflow: hidden;
-    }
-
-    .demo-header {
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      color: white;
-      padding: 20px;
       display: flex;
-      justify-content: space-between;
-      align-items: center;
+      justify-content: center;
     }
 
-    .demo-header h3 {
-      margin: 0;
-      font-size: 1.3rem;
+    .flutter-demo-shell {
+      position: relative;
+      padding: 32px 24px 48px;
+      border-radius: 24px;
+      background: radial-gradient(circle at top, rgba(99,102,241,0.2), rgba(5,5,5,0.95));
+      box-shadow: 0 25px 60px rgba(13, 13, 13, 0.45);
+      width: 100%;
+      display: flex;
+      justify-content: center;
+    }
+
+    .close-demo,
+    .fullscreen-btn {
+      position: absolute;
+      top: 16px;
+      background: rgba(255, 255, 255, 0.15);
+      border: none;
+      color: white;
+      padding: 8px 12px;
+      border-radius: 999px;
+      cursor: pointer;
+      font-size: 0.85rem;
+      backdrop-filter: blur(6px);
+      transition: background 0.2s ease, transform 0.2s ease;
     }
 
     .close-demo {
-      background: rgba(255, 255, 255, 0.2);
-      border: none;
-      color: white;
-      width: 32px;
-      height: 32px;
-      border-radius: 50%;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.2rem;
+      right: 16px;
     }
 
-    .close-demo:hover {
+    .fullscreen-btn {
+      right: 80px;
+    }
+
+    .close-demo:hover,
+    .fullscreen-btn:hover {
       background: rgba(255, 255, 255, 0.3);
+      transform: translateY(-1px);
     }
 
-    .flutter-demo-container {
-      padding: 0;
+    .iphone-frame {
+      width: min(430px, 100%);
+      aspect-ratio: 430 / 932;
+      border-radius: 28px;
+      border: 12px solid rgba(255, 255, 255, 0.08);
+      background: #050505;
+      box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08);
+      overflow: hidden;
+      position: relative;
     }
 
     .flutter-iframe {
-      border: none;
       width: 100%;
-      background: #f8f9fa;
+      height: 100%;
+      border: none;
+      background: #050505;
     }
 
     @media (max-width: 768px) {
@@ -440,6 +452,7 @@ export class DashboardComponent implements OnInit {
   selectedFilter: string = 'all';
   showFlutterDemo: boolean = false;
   flutterDemoUrl: SafeResourceUrl | null = null;
+  private readonly flutterDemoSrc = '/assets/flutter-demo/index.html';
 
   // Focus on a single flagship Flutter demo for now
   projects: Project[] = [
@@ -498,18 +511,17 @@ export class DashboardComponent implements OnInit {
   openDemo(project: Project) {
     if (project.demoUrl === 'flutter-trading-demo') {
       this.showFlutterDemo = true;
-      this.flutterDemoUrl = this.sanitizer.bypassSecurityTrustResourceUrl(
-        '/assets/flutter-demo/index.html'
-      );
-    } else if (project.demoUrl === 'flutter-mobile-demo') {
-      this.showFlutterDemo = true;
-      this.flutterDemoUrl = 'assets/flutter-mobile-demo/index.html'; // We'll create this
+      this.flutterDemoUrl = this.sanitizer.bypassSecurityTrustResourceUrl(this.flutterDemoSrc);
     }
+  }
+
+  openFullScreen() {
+    window.open(this.flutterDemoSrc, '_blank');
   }
 
   closeFlutterDemo() {
     this.showFlutterDemo = false;
-    this.flutterDemoUrl = '';
+    this.flutterDemoUrl = null;
   }
 
   viewDetails(project: Project) {
