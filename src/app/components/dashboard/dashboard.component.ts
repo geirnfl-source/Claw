@@ -40,8 +40,8 @@ interface Project {
             <h2>Liquidity, wealth &amp; family goals in one glass dashboard.</h2>
             <p class="hero-body">Realtime ISK insights, neon glass UI, and an assistant that keeps savings, transfers, and dreams aligned.</p>
             <div class="hero-actions">
-              <button class="hero-primary" (click)="openDemo(projects[0])">Launch demo</button>
-              <button class="hero-ghost" (click)="openFullScreen()">Fullscreen AI mode</button>
+              <button class="hero-primary" (click)="openDemo(projects[0])">Launch Neo Bank</button>
+              <button class="hero-ghost" (click)="openNeoBank()">Open in new tab</button>
             </div>
           </div>
           <div class="hero-orb"></div>
@@ -575,10 +575,19 @@ export class DashboardComponent implements OnInit {
   private readonly flutterDemoSrc = '/assets/flutter-demo/index.html';
   familyCard: string = 'assets/family-moment.jpg';
 
-  // Focus on a single flagship Flutter demo for now
+  // Featured projects including the new Neo Bank
   projects: Project[] = [
     {
       id: 1,
+      title: 'Neo Bank - Iceland',
+      description: 'AI-powered banking app with glassmorphic UI. Features personal/family wealth management, interactive transfer system, donut charts, loyalty rewards, and real-time ISK liquidity tracking.',
+      type: 'trading-app',
+      status: 'demo-ready',
+      technologies: ['Flutter', 'Dart', 'Glass UI', 'Neon UX', 'AI Assistant'],
+      demoUrl: 'neo-bank-live'
+    },
+    {
+      id: 2,
       title: 'Advanced Trading Platform',
       description: 'Modern trading application with real-time market data, advanced charting, and portfolio management. Features include risk assessment, automated trading strategies, and multi-asset support.',
       type: 'trading-app',
@@ -630,7 +639,10 @@ export class DashboardComponent implements OnInit {
   }
 
   openDemo(project: Project) {
-    if (project.demoUrl === 'flutter-trading-demo') {
+    if (project.demoUrl === 'neo-bank-live') {
+      // Open Neo Bank app in new tab
+      window.open('/neo-bank/', '_blank');
+    } else if (project.demoUrl === 'flutter-trading-demo') {
       this.showFlutterDemo = true;
       this.flutterDemoUrl = this.sanitizer.bypassSecurityTrustResourceUrl(this.flutterDemoSrc);
     }
@@ -638,6 +650,10 @@ export class DashboardComponent implements OnInit {
 
   openFullScreen() {
     window.open(this.flutterDemoSrc, '_blank');
+  }
+
+  openNeoBank() {
+    window.open('/neo-bank/', '_blank');
   }
 
   closeFlutterDemo() {
