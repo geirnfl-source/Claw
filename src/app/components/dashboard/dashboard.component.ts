@@ -640,8 +640,8 @@ export class DashboardComponent implements OnInit {
 
   openDemo(project: Project) {
     if (project.demoUrl === 'neo-bank-live') {
-      // Open Neo Bank app in new tab
-      window.open('/neo-bank/', '_blank');
+      // Open Neo Bank app in new tab with full URL
+      window.open('https://ebhemh.com/neo-bank/', '_blank');
     } else if (project.demoUrl === 'flutter-trading-demo') {
       this.showFlutterDemo = true;
       this.flutterDemoUrl = this.sanitizer.bypassSecurityTrustResourceUrl(this.flutterDemoSrc);
@@ -653,7 +653,7 @@ export class DashboardComponent implements OnInit {
   }
 
   openNeoBank() {
-    window.open('/neo-bank/', '_blank');
+    window.open('https://ebhemh.com/neo-bank/', '_blank');
   }
 
   closeFlutterDemo() {
