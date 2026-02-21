@@ -1,6 +1,14 @@
 {
   "rewrites": [
     {
+      "source": "/neo-bank",
+      "destination": "/src/assets/neo-bank/index.html"
+    },
+    {
+      "source": "/neo-bank/(.*)",
+      "destination": "/src/assets/neo-bank/$1"
+    },
+    {
       "source": "/(.*)",
       "destination": "/index.html"
     }

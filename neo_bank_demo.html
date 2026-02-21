@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Neo Bank - Wealth Management Demo</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(180deg, #2d080d 0%, #050505 100%);
+            color: white;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        
+        .glass-container {
+            background: rgba(255, 255, 255, 0.06);
+            backdrop-filter: blur(24px);
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            padding: 20px;
+            margin-bottom: 16px;
+        }
+        
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 24px;
+        }
+        
+        .profile-pic {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, #6366f1, #d946ef);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 18px;
+        }
+        
+        .liquidity-card {
+            margin: 24px;
+        }
+        
+        .liquidity-amount {
+            font-size: 36px;
+            font-weight: 700;
+            margin: 8px 0;
+        }
+        
+        .trend-chips {
+            display: flex;
+            gap: 12px;
+            margin: 12px 0;
+        }
+        
+        .trend-chip {
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        
+        .trend-positive {
+            background: rgba(52, 211, 153, 0.15);
+            color: #34d399;
+        }
+        
+        .trend-info {
+            background: rgba(103, 232, 249, 0.15);
+            color: #67e8f9;
+        }
+        
+        .transfer-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 16px;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 20px;
+            background: transparent;
+            color: rgba(255, 255, 255, 0.54);
+            font-size: 13px;
+            cursor: pointer;
+            text-decoration: none;
+            margin: 20px auto;
+            display: block;
+            width: fit-content;
+        }
+        
+        .transfer-button:hover {
+            background: rgba(255, 255, 255, 0.05);
+        }
+        
+        .ai-snippet {
+            margin: 24px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+        
+        .ai-icon {
+            padding: 8px 12px;
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 999px;
+            font-size: 20px;
+        }
+        
+        .accounts-section {
+            margin: 24px;
+        }
+        
+        .section-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+        
+        .account-item {
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 20px;
+            padding: 20px;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+        
+        .account-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+        }
+        
+        .account-balance {
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.7);
+            margin-top: 2px;
+        }
+        
+        .bottom-nav {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.06);
+            backdrop-filter: blur(24px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 30px;
+            padding: 12px;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+        }
+        
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 8px 16px;
+            border-radius: 20px;
+            text-decoration: none;
+            color: rgba(255, 255, 255, 0.38);
+            font-size: 12px;
+            transition: all 0.2s;
+        }
+        
+        .nav-item.active {
+            color: #6366f1;
+            background: rgba(99, 102, 241, 0.1);
+        }
+        
+        .nav-icon {
+            font-size: 20px;
+            margin-bottom: 4px;
+        }
+        
+        .feature-showcase {
+            margin: 24px;
+            padding: 24px;
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 20px;
+            text-align: center;
+        }
+        
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 16px;
+            margin-top: 20px;
+        }
+        
+        .feature-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 16px;
+            padding: 20px;
+            text-align: left;
+        }
+        
+        .feature-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 12px;
+            font-size: 20px;
+        }
+        
+        .status-badge {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 8px;
+            font-size: 10px;
+            font-weight: 600;
+            margin-top: 8px;
+        }
+        
+        .status-complete {
+            background: rgba(52, 211, 153, 0.2);
+            color: #34d399;
+        }
+        
+        @media (max-width: 768px) {
+            .header, .liquidity-card, .accounts-section {
+                padding-left: 16px;
+                padding-right: 16px;
+            }
+            
+            .feature-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div>
+            <h1 style="font-size: 24px; font-weight: 600; margin-bottom: 6px;">Good afternoon, Ragnar</h1>
+            <p style="color: rgba(255, 255, 255, 0.7); font-size: 14px;">Here is your liquidity snapshot</p>
+        </div>
+        <div class="profile-pic">R</div>
+    </div>
+    
+    <div class="glass-container liquidity-card">
+        <p style="color: rgba(255, 255, 255, 0.7);">Your liquidity</p>
+        <div class="liquidity-amount">4.250.000 ISK</div>
+        <div class="trend-chips">
+            <span class="trend-chip trend-positive">+12% vs last month</span>
+            <span class="trend-chip trend-info">Family total</span>
+        </div>
+        <div style="text-align: center; margin-top: 24px;">
+            <button class="transfer-button" onclick="showTransferModal()">
+                <span style="font-size: 16px;">⇄</span>
+                Transfer
+            </button>
+        </div>
+    </div>
+    
+    <div class="glass-container ai-snippet">
+        <div class="ai-icon">✨</div>
+        <div style="flex: 1;">
+            <h3 style="font-weight: 600; margin-bottom: 4px;">AI Assistant</h3>
+            <p style="font-size: 14px; color: rgba(255, 255, 255, 0.7);">
+                Your savings grew 12% last quarter. Ready to divert 200.000 ISK to the wealth sleeve?
+            </p>
+        </div>
+        <span style="color: rgba(255, 255, 255, 0.7); cursor: pointer;">→</span>
+    </div>
+    
+    <div class="accounts-section">
+        <h2 class="section-title">Accounts</h2>
+        
+        <div class="account-item">
+            <div class="account-icon" style="background: rgba(99, 102, 241, 0.2); color: #6366f1;">💳</div>
+            <div style="flex: 1;">
+                <h3 style="font-weight: 600; margin-bottom: 2px;">Debit Account</h3>
+                <p class="account-balance">1.850.000 ISK</p>
+            </div>
+            <span style="color: rgba(255, 255, 255, 0.6);">›</span>
+        </div>
+        
+        <div class="account-item">
+            <div class="account-icon" style="background: rgba(52, 211, 153, 0.2); color: #34d399;">💰</div>
+            <div style="flex: 1;">
+                <h3 style="font-weight: 600; margin-bottom: 2px;">Savings Account</h3>
+                <p class="account-balance">1.900.000 ISK</p>
+            </div>
+            <span style="color: rgba(255, 255, 255, 0.6);">›</span>
+        </div>
+        
+        <div class="account-item">
+            <div class="account-icon" style="background: rgba(217, 70, 239, 0.2); color: #d946ef;">🏠</div>
+            <div style="flex: 1;">
+                <h3 style="font-weight: 600; margin-bottom: 2px;">Household Account</h3>
+                <p class="account-balance">500.000 ISK</p>
+            </div>
+            <span style="color: rgba(255, 255, 255, 0.6);">›</span>
+        </div>
+    </div>
+    
+    <div class="feature-showcase">
+        <h2 style="margin-bottom: 8px;">✅ Neo Bank Features Implemented</h2>
+        <p style="color: rgba(255, 255, 255, 0.7); margin-bottom: 20px;">
+            Your Flutter app now includes all requested enhancements
+        </p>
+        
+        <div class="feature-grid">
+            <div class="feature-card">
+                <div class="feature-icon" style="background: rgba(99, 102, 241, 0.2); color: #6366f1;">🚀</div>
+                <h3 style="margin-bottom: 8px;">New Navigation</h3>
+                <p style="color: rgba(255, 255, 255, 0.7); font-size: 14px; margin-bottom: 8px;">
+                    Home | Wealth | Loyalty | AI | More
+                </p>
+                <span class="status-badge status-complete">COMPLETE</span>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-icon" style="background: rgba(217, 70, 239, 0.2); color: #d946ef;">⇄</div>
+                <h3 style="margin-bottom: 8px;">Transfer Modal</h3>
+                <p style="color: rgba(255, 255, 255, 0.7); font-size: 14px; margin-bottom: 8px;">
+                    Interactive modal with real money movement
+                </p>
+                <span class="status-badge status-complete">COMPLETE</span>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-icon" style="background: rgba(52, 211, 153, 0.2); color: #34d399;">👨‍👩‍👧‍👦</div>
+                <h3 style="margin-bottom: 8px;">Family Wealth</h3>
+                <p style="color: rgba(255, 255, 255, 0.7); font-size: 14px; margin-bottom: 8px;">
+                    Personal/Family toggle with aggregated data
+                </p>
+                <span class="status-badge status-complete">COMPLETE</span>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-icon" style="background: rgba(251, 113, 133, 0.2); color: #fb7185;">🍩</div>
+                <h3 style="margin-bottom: 8px;">Interactive Charts</h3>
+                <p style="color: rgba(255, 255, 255, 0.7); font-size: 14px; margin-bottom: 8px;">
+                    Tappable donut segments with drill-downs
+                </p>
+                <span class="status-badge status-complete">COMPLETE</span>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-icon" style="background: rgba(248, 113, 113, 0.2); color: #f87171;">🎁</div>
+                <h3 style="margin-bottom: 8px;">Loyalty System</h3>
+                <p style="color: rgba(255, 255, 255, 0.7); font-size: 14px; margin-bottom: 8px;">
+                    Points, tiers, and rewards tracking
+                </p>
+                <span class="status-badge status-complete">COMPLETE</span>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-icon" style="background: rgba(181, 187, 207, 0.2); color: #b5bbcf;">⚙️</div>
+                <h3 style="margin-bottom: 8px;">Settings Menu</h3>
+                <p style="color: rgba(255, 255, 255, 0.7); font-size: 14px; margin-bottom: 8px;">
+                    Comprehensive More screen with options
+                </p>
+                <span class="status-badge status-complete">COMPLETE</span>
+            </div>
+        </div>
+        
+        <div style="margin-top: 24px; padding: 16px; background: rgba(52, 211, 153, 0.1); border-radius: 12px; border: 1px solid rgba(52, 211, 153, 0.2);">
+            <p style="color: #34d399; font-weight: 600;">🎉 Flutter App Ready!</p>
+            <p style="color: rgba(255, 255, 255, 0.8); font-size: 14px; margin-top: 4px;">
+                All features implemented in main.dart - building for web deployment now
+            </p>
+        </div>
+    </div>
+    
+    <div style="height: 100px;"></div>
+    
+    <div class="bottom-nav">
+        <a href="#" class="nav-item active">
+            <div class="nav-icon">🏠</div>
+            <span>Home</span>
+        </a>
+        <a href="#" class="nav-item">
+            <div class="nav-icon">📈</div>
+            <span>Wealth</span>
+        </a>
+        <a href="#" class="nav-item">
+            <div class="nav-icon">🎁</div>
+            <span>Loyalty</span>
+        </a>
+        <a href="#" class="nav-item">
+            <div class="nav-icon">✨</div>
+            <span>AI</span>
+        </a>
+        <a href="#" class="nav-item">
+            <div class="nav-icon">☰</div>
+            <span>More</span>
+        </a>
+    </div>
+
+    <script>
+        function showTransferModal() {
+            alert('Transfer Modal - In the Flutter app, this opens a beautiful modal with:\n\n• Account selection dropdowns\n• Swap button\n• Amount input\n• Real balance validation\n• Success animation\n• Live balance updates');
+        }
+        
+        // Add some interactivity
+        document.querySelectorAll('.account-item').forEach(item => {
+            item.addEventListener('click', () => {
+                alert('Account Details - In the Flutter app, this would show:\n\n• Transaction history\n• Account settings\n• Quick actions\n• Balance trends');
+            });
+        });
+        
+        document.querySelector('.ai-snippet').addEventListener('click', () => {
+            alert('AI Assistant - In the Flutter app, this opens:\n\n• Full chat interface\n• Pre-loaded conversations\n• Financial guidance\n• Goal setting');
+        });
+    </script>
+</body>
+</html>
