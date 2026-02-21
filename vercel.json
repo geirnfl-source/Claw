@@ -2,11 +2,11 @@
   "rewrites": [
     {
       "source": "/neo-bank",
-      "destination": "/neobank/index.html"
+      "destination": "/neo_bank_final.html"
     },
     {
       "source": "/neo-bank/(.*)",
-      "destination": "/neobank/$1"
+      "destination": "/neo_bank_final.html"
     },
     {
       "source": "/(.*)",
